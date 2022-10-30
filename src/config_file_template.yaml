@@ -1,0 +1,75 @@
+DATASET: %(dataset)s
+
+DATA_FOLDER: %(data_folder)s
+MODEL_FOLDER: %(model_folder)s
+
+config_preprocess:
+  audio_folder: %(audio_folder)s
+  identifier: %(identifier)s
+  index_audio_file: %(index_audio_file)s
+  index_repr_file: %(index_repr_file)s
+  machine_i: 0
+  n_machines: 1
+  num_processing_units: 1
+  melspectrogram:
+    hop: 256
+    n_fft: 512
+    n_mels: 96
+    resample_sr: 16000
+    type: melspectrogram
+  vggish:
+    hop: 160
+    n_fft: 512
+    n_mels: 64
+    resample_sr: 16000
+    type: melspectrogram
+  openl3:
+    hop: 12000
+    n_fft: 2048
+    n_mels: 128
+    resample_sr: 48000
+    n_embeddings: 512
+    type: embeddings
+  tempocnn:
+    resample_sr: 11025
+    n_embeddings: 256
+    type: embeddings
+  spleeter:
+    resample_sr: 44100
+    n_embeddings: 1280
+    type: embeddings
+  effnet_b0:
+    hop: 256
+    n_fft: 512
+    n_mels: 96
+    resample_sr: 16000
+    n_embeddings: 200
+    type: embeddings
+
+config_train:
+  audio_representation_folder: %(audio_representation_folder)s
+  batch_size: 32
+  epochs: %(epochs)s
+  gt_train: %(gt_train)s
+  gt_val: %(gt_val)s
+  gt_test: %(gt_test)s
+  index_repr_regularize: ''  # index with samples to use for regularization (unsupervised domain adaptation) 
+  learning_rate: 0.001
+  load_model: %(load_model)s
+  model_number: %(model_number)s
+  n_frames: 187
+  name_run: ''
+  num_classes_dataset: %(num_classes_dataset)s
+  optimizer: Adam
+  pad_short: repeat-pad
+  param_train_sampling: 1
+  patience: 75
+  pre_processing: logC
+  train_sampling: random
+  val_batch_size: 32
+  weight_decay: 1.0e-05
+  n_folds: %(n_folds)s
+  fold: %(fold)s
+  seed: %(seed)s
+  coupling_layer_units : 100  # units of the first layer after the TL embeddings. 0 to omit a coupling layer
+  is_multilabel_task: %(is_multilabel_task)s
