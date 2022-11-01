@@ -40,7 +40,7 @@ def prediction(
 
     pred_list, id_list = [], []
     for batch in tqdm(batch_streamer):
-        predictions = model.predict(batch["X"])
+        predictions = model.predict_on_batch(batch["X"])
         # make sure our predictions are in a numpy
         # array with the proper shape
         pred_list.append(predictions)
