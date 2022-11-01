@@ -13,6 +13,7 @@ from tqdm import tqdm
 
 import models
 import shared
+import evaluate
 from data_loaders import data_generator
 
 
@@ -77,7 +78,7 @@ if __name__ == "__main__":
 
     # save experimental settings
     experiment_id = str(shared.get_epoch_time())
-    model_folder = exp_dir / "experiments" / experiment_id
+    model_folder = exp_dir / experiment_id
     if not model_folder.exists():
         model_folder.mkdir(parents=True, exist_ok=True)
     json.dump(config, open(model_folder / "config.json", "w"))
@@ -152,11 +153,6 @@ if __name__ == "__main__":
     fy = open(model_folder / "train_log.tsv", "a")
     fy.write("Epoch\ttrain_cost\tval_cost\tepoch_time\tlearing_rate\n")
     fy.close()
-
-    # automate the evaluation process
-    experiment_id_file = exp_dir / "experiment_id"
-    with open(experiment_id_file, "w") as f:
-        f.write(str(experiment_id))
 
     # training
     k_patience = 0
@@ -242,3 +238,28 @@ if __name__ == "__main__":
             cost_best_model = val_cost
 
     print("\nEVALUATE EXPERIMENT -> " + str(experiment_id))
+
+    gt_file = data_dir / "gt_test_0.csv"
+    print("groundtruth file: {}".format(gt_file))
+    ids, id2gt = shared.load_id2gt(gt_file)
+    print("# test set size: ", len(ids))
+
+    print("performing regular evaluation")
+    y_pred, metrics, healthy_ids = evaluate.prediction(
+        config,
+        model_folder,
+        id2audio_repr_path,
+        id2gt,
+        ids,
+    )
+
+    # store experimental results
+    results_file = Path(model_folder, "results.json")
+    predictions_file = Path(model_folder, "predictions.json")
+    evaluate.store_results(
+        results_file,
+        predictions_file,
+        healthy_ids,
+        y_pred,
+        metrics,
+    )
