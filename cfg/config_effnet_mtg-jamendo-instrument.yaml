@@ -1,0 +1,27 @@
+# dataset
+n_classes: 40
+dataset: mtg_jamendo_instrument
+data_dir: /home/palonso/data/mtg-jamendo-embeddings/effnet/mtg_jamendo_instrument/
+exp_dir: ../exp/mtg_jamendo_instrument/
+
+# training
+batch_size: 32
+val_batch_size: 1024
+epochs: 50
+patience: 5
+param_train_sampling: 1
+pad_short: repeat-pad
+train_sampling: random
+seed: 6
+task_type: multi-label-classification
+
+# optimizer
+optimizer: adam
+learning_rate: 1.0e-3
+weight_decay: 1.0e-5
+
+# model
+hidden_units : 100
+x_size: 1
+y_size: 1280
+output_activation: "sigmoid"

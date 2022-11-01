@@ -1,19 +1,19 @@
 # dataset
-n_classes: 9
-dataset: genre_dortmund
-data_dir: /home/palonso/data/mtgdb-models/musicnn-msd/genre_dortmund/
-exp_dir: /home/palonso/reps/mtgdb-models/src/musicnn_training/exp/vgg/genre_dortmund/
+n_classes: 87
+dataset: mtg_jamendo_genre
+data_dir: /home/palonso/data/mtg-jamendo-embeddings/effnet/mtg_jamendo_genre/
+exp_dir: ../exp/mtg_jamendo_genre/
 
 # training
 batch_size: 32
-val_batch_size: 256
+val_batch_size: 1024
 epochs: 50
 patience: 5
 param_train_sampling: 1
 pad_short: repeat-pad
 train_sampling: random
 seed: 6
-task_type: multi-class-classification
+task_type: multi-label-classification
 
 # optimizer
 optimizer: adam
@@ -23,5 +23,5 @@ weight_decay: 1.0e-5
 # model
 hidden_units : 100
 x_size: 1
-y_size: 128
+y_size: 1280
 output_activation: "sigmoid"
