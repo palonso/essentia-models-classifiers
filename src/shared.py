@@ -3,7 +3,6 @@ from ast import literal_eval
 from datetime import datetime
 
 import numpy as np
-from scipy.stats import pearsonr
 from sklearn import metrics
 from sklearn.utils.multiclass import type_of_target
 
@@ -91,17 +90,9 @@ def compute_auc(true, estimated):
     return roc_auc, pr_auc
 
 
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
-
-
-def minmax_standarize(x, x_min=-1, x_max=1, headroom=0.1):
-    return (x - x_min) / ((x_max + headroom) - (x_min - headroom))
-
-
 def average_predictions(pred_array, id_array, ids, id2gt=None):
     # averaging probabilities -> one could also do majority voting
-    print('Averaging predictions')
+    print("Averaging predictions")
     y_pred = []
     y_true = []
     healthy_ids = []
@@ -109,15 +100,15 @@ def average_predictions(pred_array, id_array, ids, id2gt=None):
         try:
             avg = np.mean(pred_array[np.where(id_array == id)], axis=0)
             if np.isnan(avg).any():
-                print('{} skipped because it contains nans'.format(id))
+                print("{} skipped because it contains nans".format(id))
                 continue
 
             if np.isposinf(avg).any():
-                print('{} skipped because it contains pos infs'.format(id))
+                print("{} skipped because it contains pos infs".format(id))
                 continue
 
             if np.isneginf(avg).any():
-                print('{} skipped because it contains neg infs'.format(id))
+                print("{} skipped because it contains neg infs".format(id))
                 continue
             y_pred.append(avg)
             if id2gt:
@@ -135,22 +126,22 @@ def average_predictions(pred_array, id_array, ids, id2gt=None):
 def average_predictions_ids(pred_array, id_array, ids):
     # averages the predictions and returns the ids of the elements
     # that did not fail.
-    print('Averaging predictions')
+    print("Averaging predictions")
     y_pred = []
     ids_present = []
     for id in ids:
         try:
             avg = np.mean(pred_array[np.where(id_array == id)], axis=0)
             if np.isnan(avg).any():
-                print('{} skipped because it contains nans'.format(id))
+                print("{} skipped because it contains nans".format(id))
                 continue
 
             if np.isposinf(avg).any():
-                print('{} skipped because it contains pos infs'.format(id))
+                print("{} skipped because it contains pos infs".format(id))
                 continue
 
             if np.isneginf(avg).any():
-                print('{} skipped because it contains neg infs'.format(id))
+                print("{} skipped because it contains neg infs".format(id))
                 continue
             y_pred.append(avg)
             ids_present.append(id)
@@ -163,7 +154,7 @@ def average_predictions_ids(pred_array, id_array, ids):
 def compute_accuracy(y_true, y_pred):
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
-    print('computing accuracy of {} elements'.format(len(y_true)))
+    print("computing accuracy of {} elements".format(len(y_true)))
 
     groundtruth_type = type_of_groundtruth(y_true)
     if groundtruth_type == "multilabel-indicator":
@@ -180,10 +171,10 @@ def compute_accuracy(y_true, y_pred):
 
 
 def compute_pearson_correlation(y_true, y_pred, axis=0):
-    print(f'computing Pearson Correlation Coefficient of {len(y_true)} elements')
+    print(f"computing Pearson Correlation Coefficient of {len(y_true)} elements")
 
-    mx = np.mean(y_true,axis=axis)
-    my = np.mean(y_pred,axis=axis)
+    mx = np.mean(y_true, axis=axis)
+    my = np.mean(y_pred, axis=axis)
     xm, ym = y_true - mx, y_pred - my
     r_num = np.mean(xm * ym, axis=axis)
     r_den = np.std(xm, axis=axis) * np.std(ym, axis=axis)
@@ -192,8 +183,7 @@ def compute_pearson_correlation(y_true, y_pred, axis=0):
 
 
 def compute_ccc(y_true, y_pred, axis=0):
-
-    print(f'computing Concordance Correlation Coefficient of {len(y_true)} elements')
+    print(f"computing Concordance Correlation Coefficient of {len(y_true)} elements")
 
     # Concordance Correlation Coefficient (CCC)
     x_mean = np.mean(y_true, axis=axis)
@@ -213,37 +203,40 @@ def compute_ccc(y_true, y_pred, axis=0):
 
 # R2 score
 def compute_r2_score(y_true, y_pred, axis=0):
-
-    print(f'computing R2 Score of {len(y_true)} elements')
+    print(f"computing R2 Score of {len(y_true)} elements")
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
 
     ss_residual = np.sum(np.square(y_true - y_pred), axis=0)
-    ss_total = np.sum(
-        np.square(y_true - np.mean(y_true)), axis=0
-    )
-    r_squared = 1.0 - np.nan_to_num(ss_residual/ss_total)
+    ss_total = np.sum(np.square(y_true - np.mean(y_true)), axis=0)
+    r_squared = 1.0 - np.nan_to_num(ss_residual / ss_total)
     return r_squared
 
 
 # Adjusted R2 score
 def compute_adjusted_r2_score(y_true, y_pred, p):
     # p refers to the number of predictors (i.e for arousal and valence p=2)
-    print(f'computing Adjusted R2 Score of {len(y_true)} elements')
+    print(f"computing Adjusted R2 Score of {len(y_true)} elements")
     r_squared = compute_r2_score(y_true, y_pred)
-    adjusted_r_squared = 1 - (1 - r_squared) * (len(y_true) - 1.0) / (len(y_true) - p - 1.0)
+    adjusted_r_squared = 1 - (1 - r_squared) * (len(y_true) - 1.0) / (
+        len(y_true) - p - 1.0
+    )
     return adjusted_r_squared
 
 
 def compute_root_mean_squared_error(y_true, y_pred):
-    print(f'computing Root Mean Squared Error of {len(y_true)} elements')
+    print(f"computing Root Mean Squared Error of {len(y_true)} elements")
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
-    return metrics.mean_squared_error(y_true, y_pred, multioutput="raw_values", squared=True)
+    return metrics.mean_squared_error(
+        y_true, y_pred, multioutput="raw_values", squared=True
+    )
 
 
 def compute_mean_squared_error(y_true, y_pred):
-    print(f'computing Mean Squared Error of {len(y_true)} elements')
+    print(f"computing Mean Squared Error of {len(y_true)} elements")
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
-    return metrics.mean_squared_error(y_true, y_pred, multioutput="raw_values", squared=False)
+    return metrics.mean_squared_error(
+        y_true, y_pred, multioutput="raw_values", squared=False
+    )
