@@ -13,7 +13,7 @@ param_train_sampling: 1
 pad_short: repeat-pad
 train_sampling: random
 seed: 6
-task_type: classification
+task_type: multi-class-classification
 
 # optimizer
 optimizer: adam

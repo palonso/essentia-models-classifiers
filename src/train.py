@@ -18,7 +18,7 @@ from data_loaders import data_generator
 def model_and_cost(config):
     model = models.classifier(config)
 
-    if config["task_type"] == "classification":
+    if "classification" in config["task_type"]:
         loss = losses.CategoricalCrossentropy()
     elif config["task_type"] == "regression":
         loss = losses.MeanSquareError()
