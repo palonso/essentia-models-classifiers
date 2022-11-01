@@ -2,7 +2,8 @@
 This repository contains scripts to train and evaluate classifiers on top of audio representations (embeddings).
 
 # Setup
-1. Install dependencies: `pip install -r requirements.txt`
+1. We recommend following the official [instructions](https://www.tensorflow.org/install/pip) to install TensorFlow and the CUDA library with Conda.
+2. After this, install the rest of dependencies in the created environment: `pip install -r requirements.txt`
 2. Modify path to data in the configuration files by changing the `data_dir` field in the configuration files at `cfg/`
 
 # Usage
