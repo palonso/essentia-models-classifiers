@@ -1,0 +1,27 @@
+# dataset
+n_classes: 10
+dataset: genre_tzanetakis
+data_dir: /home/palonso/data/mtgdb-models/effnet_b0_3M/genre_tzanetakis/
+exp_dir: ../exp/gtzan/
+
+# training
+batch_size: 32
+val_batch_size: 1024
+epochs: 25
+patience: 5
+param_train_sampling: 1
+pad_short: repeat-pad
+train_sampling: random
+seed: 6
+task_type: multi-class-classification
+
+# optimizer
+optimizer: adam
+learning_rate: 1.0e-3
+weight_decay: 1.0e-5
+
+# model
+hidden_units : 512
+x_size: 1
+y_size: 1280
+output_activation: "softmax"
