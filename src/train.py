@@ -9,6 +9,7 @@ from yaml import load, Loader
 from tensorflow.keras import backend as K
 from tensorflow.keras import losses
 from tensorflow.keras import optimizers
+from tqdm import tqdm
 
 import models
 import shared
@@ -58,9 +59,6 @@ if __name__ == "__main__":
     data_dir = Path(config["data_dir"])
 
     np.random.seed(seed=config["seed"])
-
-    # get the data loader
-    print("Loading data generator for regular training")
 
     # load audio representation paths
     file_index = data_dir / "index_repr.tsv"
@@ -112,6 +110,8 @@ if __name__ == "__main__":
         # Re-dump config with ids
         json.dump(config, open(model_folder + "config.json", "w"))
 
+    n_batches_train = int(np.ceil(len(ids_train) / config["batch_size"]))
+    n_batches_val = int(np.ceil(len(ids_val) / config["val_batch_size"]))
     # pescador train: define streamer
     train_pack = [config, config["train_sampling"], config["param_train_sampling"]]
     train_streams = [
@@ -171,7 +171,7 @@ if __name__ == "__main__":
 
         start_time = time.time()
         array_train_cost = []
-        for batch in train_batch_streamer:
+        for batch in tqdm(train_batch_streamer, desc="train", total=n_batches_train):
             tf_start = time.time()
 
             train_cost = model.train_on_batch(batch["X"], batch["Y"])
@@ -179,7 +179,7 @@ if __name__ == "__main__":
 
         # validation
         array_val_cost = []
-        for batch in val_batch_streamer:
+        for batch in tqdm(val_batch_streamer, desc="val"):
             val_cost = model.test_on_batch(batch["X"], batch["Y"])
             array_val_cost.append(val_cost)
 
