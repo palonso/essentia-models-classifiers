@@ -1,0 +1,27 @@
+# dataset
+n_classes: 9
+dataset: genre_dortmund
+data_dir: /home/palonso/data/mtgdb-models/musicnn-msd/genre_dortmund/
+exp_dir: /home/palonso/reps/mtgdb-models/src/musicnn_training/exp/vgg/genre_dortmund/
+
+# training
+batch_size: 32
+val_batch_size: 256
+epochs: 50
+patience: 5
+param_train_sampling: 1
+pad_short: repeat-pad
+train_sampling: random
+seed: 6
+task_type: classification
+
+# optimizer
+optimizer: adam
+learning_rate: 1.0e-3
+weight_decay: 1.0e-5
+
+# model
+hidden_units : 100
+x_size: 1
+y_size: 128
+output_activation: "sigmoid"
