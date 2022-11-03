@@ -15,11 +15,6 @@ def get_epoch_time():
     return int((datetime.now() - datetime(1970, 1, 1)).total_seconds())
 
 
-def count_params(trainable_variables):
-    # to return number of trainable variables. Example: shared.count_params(tf.trainable_variables()))
-    return np.sum([np.prod(v.get_shape().as_list()) for v in trainable_variables])
-
-
 def load_id2gt(gt_file):
     ids = []
     fgt = open(gt_file)
