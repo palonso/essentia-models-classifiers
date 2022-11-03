@@ -20,10 +20,12 @@ from data_loaders import data_generator
 def model_and_cost(config):
     model = models.classifier(config)
 
-    if "classification" in config["task_type"]:
+    if config["task_type"] == "multi-class-classification":
         loss = losses.CategoricalCrossentropy()
+    elif config["task_type"] == "multi-label-classification":
+        loss = losses.BinaryCrossentropy()
     elif config["task_type"] == "regression":
-        loss = losses.MeanSquareError()
+        loss = losses.MeanSquaredError()
     else:
         raise Exception(f"task type {config['task_type']} is not defined!")
 
